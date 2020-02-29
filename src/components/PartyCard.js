@@ -13,14 +13,12 @@ const PartyCard = props => {
       <Card.Body>
         <Card.Title>{props.theme}</Card.Title>
         <Card.Text>
-          <div>
-            <Calendar height="40" width="40" />
-            <span>{props.when}</span>
-          </div>
-          <div>
-            <People height="40" width="40" />
-            <span>{props.numberGuest}</span>
-          </div>
+          <Calendar height="40" width="40" />
+          <span>{props.when}</span>
+        </Card.Text>
+        <Card.Text>
+          <People height="40" width="40" />
+          <span>{props.numberGuest}</span>
         </Card.Text>
       </Card.Body>
     </Card>
