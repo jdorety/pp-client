@@ -3,10 +3,11 @@ import axios from "../util/axios";
 import { Container } from "react-bootstrap";
 import PartyCard from "./PartyCard";
 
-const axiosCall = axios.axiosHeaders();
-
-const PartyList = () => {
+const PartyList = props => {
   const [parties, setParties] = useState([]);
+
+  const axiosCall = axios.axiosHeaders();
+
 
   useEffect(() => {
     axiosCall
@@ -18,7 +19,11 @@ const PartyList = () => {
   return (
     <Container>
       {parties.map(party => (
-        <PartyCard {...party} key={party.id} />
+        <PartyCard
+          {...party}
+          key={party.id}
+          history={props.history}
+        />
       ))}
     </Container>
   );
