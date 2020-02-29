@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Route } from "react-router-dom";
 import PartyList from "./components/PartyList";
 import PartyView from "./components/PartyView/PartyView"
