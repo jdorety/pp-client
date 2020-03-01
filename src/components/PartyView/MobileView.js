@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import { Jumbotron } from "react-bootstrap";
 import InfoCard from "./InfoCard";
 /**
@@ -21,4 +22,4 @@ const MobileView = props => {
   );
 };
 
-export default MobileView;
+export default withRouter(MobileView);
