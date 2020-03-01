@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-
+import PropTypes from "prop-types";
 import axios from "../../util/axios";
+import MobileView from "./MobileView";
+
 const axiosCall = axios.axiosHeaders();
 
 const PartyView = props => {
@@ -17,7 +19,17 @@ const PartyView = props => {
       .catch(err => console.log(err));
   }, [props.match.params.id]);
 
-  return <h3>{party.theme}</h3>;
+  return <MobileView {...party} />;
+  
+};
+
+PartyView.propTypes = {
+  theme: PropTypes.string,
+  username: PropTypes.string,
+  when: PropTypes.string,
+  numberGuest: PropTypes.number,
+  budget: PropTypes.number,
+  spentBudget: PropTypes.number
 };
 
 export default PartyView;
