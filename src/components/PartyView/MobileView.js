@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { Jumbotron } from "react-bootstrap";
 import InfoCard from "./InfoCard";
+import List from "../List/List";
 /**
  * Mobile view
  * @prop {string} theme The theme, or name of the party
@@ -18,6 +19,7 @@ const MobileView = props => {
         <h3>{props.theme}</h3>
       </Jumbotron>
       <InfoCard {...props} />
+      <List partyId={props.match.params.id} />
     </>
   );
 };

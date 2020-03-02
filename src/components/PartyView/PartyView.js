@@ -7,11 +7,7 @@ const axiosCall = axios.axiosHeaders();
 
 
 const PartyView = props => {
-  const [party, setParty] = useState({
-    todos: [],
-    entertainment: [],
-    shopping: []
-  });
+  const [party, setParty] = useState({});
 
   useEffect(() => {
     const partyId = props.match.params.id;
