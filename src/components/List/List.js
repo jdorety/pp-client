@@ -19,8 +19,11 @@ const reducer = (state, action) => {
     case "TOGGLE_CHECK":
       console.log("toggle check");
       const copy = [...state.todos];
-      const index = copy.findIndex(item => item.id === parseInt(action.id));
-      copy[index]["completed"] = !copy[index]["completed"];
+      if (copy[action.id]["completed"]) {
+        copy[action.id]["completed"] = !copy[action.id]["completed"];
+      } else {
+        copy[action.id]["completed"] = true
+      }
       return { todos: [...copy] };
     default:
       return state;
@@ -46,25 +49,33 @@ const List = props => {
   };
 
   useEffect(() => {
-    console.log("booty")
+    console.log("booty");
     getData(props.partyId);
   }, [props.partyId]);
 
   const toggleCheck = e => {
     dispatch({ type: "TOGGLE_CHECK", id: e.target.id });
+    axiosCall
+      .put(`api/todos/${e.target.name}`, {
+        ...todos[e.target.id],
+        completed: !todos[e.target.id]
+      })
+      .then(res => getData(props.partyId))
+      .catch(err => console.log(err));
   };
 
   return (
     <Form>
-      {todos.map(item => {
+      {todos.map((item, index) => {
         return (
           <Form.Check
             key={`todo-${item.id}`}
             type="checkbox"
-            id={item.id}
+            id={index}
             label={item.item}
             checked={item.completed}
             onChange={toggleCheck}
+            name={item.id}
           />
         );
       })}
