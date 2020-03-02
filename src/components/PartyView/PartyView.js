@@ -5,8 +5,13 @@ import MobileView from "./MobileView";
 
 const axiosCall = axios.axiosHeaders();
 
+
 const PartyView = props => {
-  const [party, setParty] = useState({});
+  const [party, setParty] = useState({
+    todos: [],
+    entertainment: [],
+    shopping: []
+  });
 
   useEffect(() => {
     const partyId = props.match.params.id;
@@ -20,7 +25,6 @@ const PartyView = props => {
   }, [props.match.params.id]);
 
   return <MobileView {...party} />;
-  
 };
 
 PartyView.propTypes = {
