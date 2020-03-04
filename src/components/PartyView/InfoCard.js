@@ -4,6 +4,7 @@ import { Calendar, People, Wallet } from "../../Icons";
 
 const InfoCard = props => (
   <Card>
+    <Card.Header>{props.theme}</Card.Header>
     <Card.Body>
       <Card.Text>
         <Calendar height="40" width="40" />

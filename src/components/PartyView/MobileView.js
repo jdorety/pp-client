@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { withRouter } from "react-router-dom";
-import { Accordion, Card, Container, Jumbotron } from "react-bootstrap";
+import { Accordion, Card } from "react-bootstrap";
 import InfoCard from "./InfoCard";
 import List from "../List/List";
 import PartyContext from "../../contexts/PartyContext";
@@ -17,11 +17,8 @@ const MobileView = props => {
   const { party } = useContext(PartyContext);
   return (
     <>
-      <Jumbotron fluid>
-        <h3>{party.theme}</h3>
-      </Jumbotron>
       <InfoCard {...party} />
-      <Accordion >
+      <Accordion>
         <Card>
           <Accordion.Toggle as={Card.Header} eventKey="0">
             To Do List
