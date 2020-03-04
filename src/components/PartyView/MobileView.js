@@ -4,7 +4,6 @@ import { Jumbotron } from "react-bootstrap";
 import InfoCard from "./InfoCard";
 import List from "../List/List";
 import PartyContext from "../../contexts/PartyContext";
-import PartyReducer from "../../reducers/PartyReducer";
 /**
  * Mobile view
  * @prop {string} theme The theme, or name of the party
