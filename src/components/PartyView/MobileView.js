@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import { withRouter } from "react-router-dom";
 import { Jumbotron } from "react-bootstrap";
 import InfoCard from "./InfoCard";
 import List from "../List/List";
+import PartyContext from "../../contexts/PartyContext";
+import PartyReducer from "../../reducers/PartyReducer";
 /**
  * Mobile view
  * @prop {string} theme The theme, or name of the party
@@ -13,12 +15,13 @@ import List from "../List/List";
  * @prop {number} spentBudget The amount of money spent on the party so far
  */
 const MobileView = props => {
+  const {party} = useContext(PartyContext)
   return (
     <>
       <Jumbotron fluid>
-        <h3>{props.theme}</h3>
+        <h3>{party.theme}</h3>
       </Jumbotron>
-      <InfoCard {...props} />
+      <InfoCard {...party} />
       <List partyId={props.match.params.id} />
     </>
   );
