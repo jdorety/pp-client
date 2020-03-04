@@ -1,0 +1,9 @@
+export const PARTY_LOADING = "PARTY_LOADING";
+export const PARTY_SUCCESS = "PARTY_SUCCESS";
+export const PARTY_FAILURE = "PARTY_FAILURE";
+export const TODO_LOAD = "TODO_LOAD";
+export const TODO_UPDATE = "TODO_UPDATE";
+export const TODO_FAILURE = "TODO_FAILURE";
+export const TOGGLE_START = "TOGGLE_START";
+export const TOGGLE_SUCCESS = "TOGGLE_SUCCESS";
+export const TOGGLE_FAILURE = "TOGGLE_FAILURE";
