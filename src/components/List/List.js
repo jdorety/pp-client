@@ -1,85 +1,91 @@
 import React, { useEffect, useReducer } from "react";
-import { Form } from "react-bootstrap";
-
+import { Container, Form } from "react-bootstrap";
+import {
+  TODO_LOAD,
+  TODO_UPDATE,
+  TODO_FAILURE,
+  TOGGLE_START,
+  TOGGLE_SUCCESS,
+  TOGGLE_FAILURE
+} from "../../util/actionVars";
 import axios from "../../util/axios";
+import TodoReducer from "../../reducers/TodoReducer";
 
-// list needs to work for Entertainment, Shopping, and Todo lists
-// variables that differ between the three:
-// checked - Entertainment - ready; Shopping - purchased;  Todo - completed
 const axiosCall = axios.axiosHeaders();
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "FETCH_SUCCESS":
-      console.log("FETCH_SUCCESS");
-      return { todos: [...action.list] };
-    case "FETCH_FAILURE":
-      console.log("FETCH_FAILURE");
-      return { todos: ["failure"] };
-    case "TOGGLE_CHECK":
-      console.log("toggle check");
-      const copy = [...state.todos];
-      if (copy[action.id]["completed"]) {
-        copy[action.id]["completed"] = !copy[action.id]["completed"];
-      } else {
-        copy[action.id]["completed"] = true
-      }
-      return { todos: [...copy] };
-    default:
-      return state;
-  }
-};
 
 /**
  * List
  * @prop {array} list contains list items with properties
  */
 const List = props => {
-  const [{ todos }, dispatch] = useReducer(reducer, { todos: [] });
+  const [state, dispatch] = useReducer(TodoReducer, {
+    todos: [],
+    loading: false,
+    error: "",
+    updating: false
+  });
 
-  const getData = id => {
+  useEffect(() => {
+    dispatch({ type: TODO_LOAD });
+    fetchTodos();
+  }, []);
+
+  const fetchTodos = () => {
     axiosCall
-      .get(`/api/party/${id}/todos`)
+      .get(`/api/party/${props.partyId}/todos`)
       .then(res => {
-        dispatch({ type: "FETCH_SUCCESS", list: res.data });
+        console.log(res);
+        dispatch({ type: TODO_UPDATE, list: res.data });
       })
       .catch(err => {
-        dispatch({ type: "FETCH_FAILURE" });
+        console.log(err.message);
+        dispatch({ type: TODO_FAILURE, error: err.message });
       });
   };
 
-  useEffect(() => {
-    console.log("booty");
-    getData(props.partyId);
-  }, [props.partyId]);
-
-  const toggleCheck = e => {
-    dispatch({ type: "TOGGLE_CHECK", id: e.target.id });
-    axiosCall
-      .put(`api/todos/${e.target.name}`, {
-        ...todos[e.target.id],
-        completed: !todos[e.target.id]
-      })
-      .then(res => getData(props.partyId))
-      .catch(err => console.log(err));
+  const toggleHandler = async e => {
+    try {
+      console.log(e.target.name);
+      const i = e.target.name;
+      const toggledItem = {
+        ...state.todos[e.target.name],
+        completed: !state.todos[e.target.name].completed
+      };
+      console.log(toggledItem);
+      dispatch({ type: TOGGLE_START, index: i, item: toggledItem });
+      const response = await axiosCall.put(
+        `/api/todos/${toggledItem.id}`,
+        toggledItem
+      );
+      if (response === 1) {
+        dispatch({ type: TOGGLE_SUCCESS });
+        fetchTodos();
+      } else {
+        dispatch({ type: TOGGLE_FAILURE, error: "Unable to edit" });
+      }
+    } catch (err) {
+      dispatch({ type: TOGGLE_FAILURE, error: err.message });
+    }
   };
 
   return (
-    <Form>
-      {todos.map((item, index) => {
-        return (
-          <Form.Check
-            key={`todo-${item.id}`}
-            type="checkbox"
-            id={index}
-            label={item.item}
-            checked={item.completed}
-            onChange={toggleCheck}
-            name={item.id}
-          />
-        );
-      })}
-    </Form>
+    <Container>
+      <Form>
+        {state.todos.map((item, index) => {
+          return (
+            <Form.Check
+              key={`todo-${item.id}`}
+              type="checkbox"
+              label={item.item}
+              checked={!item.completed}
+              name={index}
+              onChange={toggleHandler}
+            />
+          );
+        })}
+      </Form>
+    </Container>
   );
 };
 
