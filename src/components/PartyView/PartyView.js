@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import axios from "../../util/axios";
 import MobileView from "./MobileView";
@@ -8,7 +8,7 @@ import PartyContext from "../../contexts/PartyContext";
 import {
   PARTY_FAILURE,
   PARTY_LOADING,
-  PARTY_SUCCESS,
+  PARTY_SUCCESS
 } from "../../util/actionVars";
 
 const axiosCall = axios.axiosHeaders();
@@ -22,7 +22,7 @@ const PartyView = props => {
     theme: "",
     numberGuest: 0,
     budget: 0,
-    spentBudget: 0,
+    spentBudget: 0
   });
 
   useEffect(() => {
@@ -40,6 +40,11 @@ const PartyView = props => {
       });
   }, [props.match.params.id]);
 
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => setWidth(window.innerWidth));
+  });
   // const toggleTodo = e => {
   //   console.log(e.target);
   //   dispatch({ type: TODO_TOGGLE, index: e.target.name });
@@ -48,7 +53,8 @@ const PartyView = props => {
 
   return (
     <PartyContext.Provider value={{ party }}>
-      <MobileView />
+      {width <= 575 && <MobileView />}
+      {width > 575 && <h1>Desktop!</h1>}
     </PartyContext.Provider>
   );
 };
