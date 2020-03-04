@@ -1,6 +1,6 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { withRouter } from "react-router-dom";
-import { Jumbotron } from "react-bootstrap";
+import { Accordion, Card, Container, Jumbotron } from "react-bootstrap";
 import InfoCard from "./InfoCard";
 import List from "../List/List";
 import PartyContext from "../../contexts/PartyContext";
@@ -14,14 +14,23 @@ import PartyContext from "../../contexts/PartyContext";
  * @prop {number} spentBudget The amount of money spent on the party so far
  */
 const MobileView = props => {
-  const {party} = useContext(PartyContext)
+  const { party } = useContext(PartyContext);
   return (
     <>
       <Jumbotron fluid>
         <h3>{party.theme}</h3>
       </Jumbotron>
       <InfoCard {...party} />
-      <List partyId={props.match.params.id} />
+      <Accordion >
+        <Card>
+          <Accordion.Toggle as={Card.Header} eventKey="0">
+            To Do List
+          </Accordion.Toggle>
+          <Accordion.Collapse eventKey="0">
+            <List as={Card.Body} partyId={props.match.params.id} />
+          </Accordion.Collapse>
+        </Card>
+      </Accordion>
     </>
   );
 };
