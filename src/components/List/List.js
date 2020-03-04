@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { Container, Form } from "react-bootstrap";
+import { Alert, Container, Form } from "react-bootstrap";
 import {
   TODO_LOAD,
   TODO_UPDATE,
@@ -13,10 +13,9 @@ import TodoReducer from "../../reducers/TodoReducer";
 
 const axiosCall = axios.axiosHeaders();
 
-
 /**
  * List
- * @prop {array} list contains list items with properties
+ * @prop {number} partyId this party's id number in the backend database
  */
 const List = props => {
   const [state, dispatch] = useReducer(TodoReducer, {
@@ -58,7 +57,7 @@ const List = props => {
         `/api/todos/${toggledItem.id}`,
         toggledItem
       );
-      if (response === 1) {
+      if (response.data === 1) {
         dispatch({ type: TOGGLE_SUCCESS });
         fetchTodos();
       } else {
@@ -71,6 +70,7 @@ const List = props => {
 
   return (
     <Container>
+      {state.error && <Alert variant="danger">{state.error}</Alert>}
       <Form>
         {state.todos.map((item, index) => {
           return (
