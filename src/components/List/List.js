@@ -15,7 +15,7 @@ const axiosCall = axios.axiosHeaders();
 
 /**
  * List
- * @prop {array} list contains list items with properties
+ * @prop {number} partyId this party's id number in the backend database
  */
 const List = props => {
   const [state, dispatch] = useReducer(TodoReducer, {
