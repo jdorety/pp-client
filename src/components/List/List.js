@@ -46,17 +46,24 @@ const List = props => {
   const toggleHandler = async e => {
     try {
       console.log(e.target.name);
+      // get index of entry in array from name attribute
       const i = e.target.name;
+      // create new object duplicating orginal entry with completed field inverted
       const toggledItem = {
         ...state.todos[e.target.name],
         completed: !state.todos[e.target.name].completed
       };
       console.log(toggledItem);
+      // reducer changes local state to reflect changes
       dispatch({ type: TOGGLE_START, index: i, item: toggledItem });
+      // send request to toggle item on backend
       const response = await axiosCall.put(
         `/api/todos/${toggledItem.id}`,
         toggledItem
       );
+      // successfult response dispatches success, updates todo list from server
+      // Maybe get rid of update from server, since a successful put should
+      // mean that local and backend status are the same?
       if (response.data === 1) {
         dispatch({ type: TOGGLE_SUCCESS });
         fetchTodos();
