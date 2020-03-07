@@ -45,7 +45,6 @@ const List = props => {
 
   const toggleHandler = async e => {
     try {
-      console.log(e.target.name);
       // get index of entry in array from name attribute
       const i = e.target.name;
       // create new object duplicating orginal entry with completed field inverted
@@ -53,7 +52,6 @@ const List = props => {
         ...state.todos[e.target.name],
         completed: !state.todos[e.target.name].completed
       };
-      console.log(toggledItem);
       // reducer changes local state to reflect changes
       dispatch({ type: TOGGLE_START, index: i, item: toggledItem });
       // send request to toggle item on backend
