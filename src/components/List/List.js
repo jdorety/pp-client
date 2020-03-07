@@ -78,7 +78,7 @@ const List = props => {
               key={`todo-${item.id}`}
               type="checkbox"
               label={item.item}
-              checked={!item.completed}
+              checked={item.completed}
               name={index}
               onChange={toggleHandler}
             />
