@@ -18,10 +18,14 @@ import {
   TOGGLE_FAILURE,
   ADD_ITEM_START,
   ADD_ITEM_SUCCESS,
-  ADD_ITEM_FAILURE
+  ADD_ITEM_FAILURE,
+  REMOVE_ITEM_START,
+  REMOVE_ITEM_SUCCESS,
+  REMOVE_ITEM_FAILURE
 } from "../../util/actionVars";
 import axios from "../../util/axios";
 import TodoReducer from "../../reducers/TodoReducer";
+import "./List.scss";
 
 const axiosCall = axios.axiosHeaders();
 
@@ -104,6 +108,7 @@ const List = props => {
       .then(res => {
         dispatch({ type: ADD_ITEM_SUCCESS });
         console.log(res);
+        setItem("");
         fetchTodos();
       })
       .catch(err => {
@@ -112,20 +117,43 @@ const List = props => {
       });
   };
 
+  const deleteItem = async e => {
+    dispatch({ type: REMOVE_ITEM_START, id: e.target.name });
+    console.log("delete", e.target);
+    try {
+      const todoId = state.todos[e.target.name].id;
+      const response = await axiosCall.delete(`/api/todos/${todoId}`);
+      console.log(response.status);
+      if (response.status === 204) {
+        dispatch({ type: REMOVE_ITEM_SUCCESS });
+        fetchTodos();
+      } else {
+        dispatch({ type: REMOVE_ITEM_FAILURE, error: "Item not found" });
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch({ type: REMOVE_ITEM_FAILURE, error: err.message });
+    }
+  };
+
   return (
     <>
       {state.error && <Alert variant="danger">{state.error}</Alert>}
       <ListGroup className="mb-3">
         {state.todos.map((item, index) => {
           return (
-            <ListGroupItem key={`todo-${item.id}`}>
+            <ListGroupItem key={`todo-${item.id}`} className="td entry">
               <Form.Check
                 type="checkbox"
-                label={item.item}
+                // label={item.item}
                 checked={item.completed}
                 name={index}
                 onChange={toggleHandler}
               />
+              <Form.Label>{item.item}</Form.Label>
+              <Button name={index} variant="light" onClick={deleteItem}>
+                X
+              </Button>
             </ListGroupItem>
           );
         })}

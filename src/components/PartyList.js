@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../util/axios";
 import { Container } from "react-bootstrap";
 import PartyCard from "./PartyCard";
+import { convertDate } from "../util/dataHelpers";
 
 const axiosCall = axios.axiosHeaders();
 
@@ -12,15 +13,22 @@ const PartyList = props => {
   useEffect(() => {
     axiosCall
       .get(`/api/user/${userId}/parties`)
-      .then(res => setParties(res.data))
+      .then(res => {
+        console.log(res.data);
+        const formatData = res.data.map(party => {
+          // add prettyWhen string for UI display of party date
+          return { ...party, prettyWhen: convertDate(party.when) };
+        });
+        setParties(formatData);
+      })
       .catch(err => console.log(err));
   }, []);
 
   return (
     <Container>
-        {parties.map(party => (
-          <PartyCard {...party} key={party.id} history={props.history} />
-        ))}
+      {parties.map(party => (
+        <PartyCard {...party} key={party.id} history={props.history} />
+      ))}
     </Container>
   );
 };
