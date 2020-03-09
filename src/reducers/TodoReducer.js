@@ -4,7 +4,10 @@ import {
   TODO_FAILURE,
   TOGGLE_START,
   TOGGLE_SUCCESS,
-  TOGGLE_FAILURE
+  TOGGLE_FAILURE,
+  ADD_ITEM_START,
+  ADD_ITEM_SUCCESS,
+  ADD_ITEM_FAILURE
 } from "../util/actionVars";
 
 export default function TodoReducer(state, action) {
@@ -23,6 +26,25 @@ export default function TodoReducer(state, action) {
       return { ...state, updating: false, error: "" };
     case TOGGLE_FAILURE:
       return { ...state, updating: false, error: action.error };
+    case ADD_ITEM_START:
+      return {
+        ...state,
+        updating: true,
+        error: "",
+        todos: state.todos.concat([action.item])
+      };
+    case ADD_ITEM_SUCCESS:
+      return {
+        ...state,
+        updating: false
+      };
+    case ADD_ITEM_FAILURE:
+      return {
+        ...state,
+        todos: [...state.todos.slice(0, state.todos.length)],
+        updating: false,
+        error: action.error
+      };
     default:
       return state;
   }

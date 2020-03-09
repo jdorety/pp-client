@@ -16,7 +16,7 @@ const InfoCard = props => (
       </Card.Text>
       <Card.Text>
         <Wallet height="40" width="40" />
-        {`${props.spentBudget} / ${props.budget}`}
+        {`$${props.spentBudget} / $${props.budget}`}
       </Card.Text>
     </Card.Body>
   </Card>
