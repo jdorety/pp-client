@@ -7,7 +7,10 @@ import {
   TOGGLE_FAILURE,
   ADD_ITEM_START,
   ADD_ITEM_SUCCESS,
-  ADD_ITEM_FAILURE
+  ADD_ITEM_FAILURE,
+  REMOVE_ITEM_START,
+  REMOVE_ITEM_SUCCESS,
+  REMOVE_ITEM_FAILURE
 } from "../util/actionVars";
 
 export default function TodoReducer(state, action) {
@@ -45,6 +48,13 @@ export default function TodoReducer(state, action) {
         updating: false,
         error: action.error
       };
+    case REMOVE_ITEM_START:
+      const list = [...state.todos].filter(item => item.id !== action.id);
+      return { ...state, loading: true, error: "", todos: list };
+    case REMOVE_ITEM_SUCCESS:
+      return { ...state, loading: false };
+    case REMOVE_ITEM_FAILURE:
+      return { ...state, loading: false, error: action.error };
     default:
       return state;
   }

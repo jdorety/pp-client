@@ -18,7 +18,10 @@ import {
   TOGGLE_FAILURE,
   ADD_ITEM_START,
   ADD_ITEM_SUCCESS,
-  ADD_ITEM_FAILURE
+  ADD_ITEM_FAILURE,
+  REMOVE_ITEM_START,
+  REMOVE_ITEM_SUCCESS,
+  REMOVE_ITEM_FAILURE
 } from "../../util/actionVars";
 import axios from "../../util/axios";
 import TodoReducer from "../../reducers/TodoReducer";
@@ -105,6 +108,7 @@ const List = props => {
       .then(res => {
         dispatch({ type: ADD_ITEM_SUCCESS });
         console.log(res);
+        setItem("");
         fetchTodos();
       })
       .catch(err => {
@@ -113,9 +117,24 @@ const List = props => {
       });
   };
 
-  const deleteItem = e => {
-    
-  }
+  const deleteItem = async e => {
+    dispatch({ type: REMOVE_ITEM_START, id: e.target.name });
+    console.log("delete", e.target);
+    try {
+      const todoId = state.todos[e.target.name].id;
+      const response = await axiosCall.delete(`/api/todos/${todoId}`);
+      console.log(response.status);
+      if (response.status === 204) {
+        dispatch({ type: REMOVE_ITEM_SUCCESS });
+        fetchTodos();
+      } else {
+        dispatch({ type: REMOVE_ITEM_FAILURE, error: "Item not found" });
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch({ type: REMOVE_ITEM_FAILURE, error: err.message });
+    }
+  };
 
   return (
     <>
@@ -126,12 +145,15 @@ const List = props => {
             <ListGroupItem key={`todo-${item.id}`} className="td entry">
               <Form.Check
                 type="checkbox"
-                label={item.item}
+                // label={item.item}
                 checked={item.completed}
                 name={index}
                 onChange={toggleHandler}
               />
-              <Button variant="light">X</Button>
+              <Form.Label>{item.item}</Form.Label>
+              <Button name={index} variant="light" onClick={deleteItem}>
+                X
+              </Button>
             </ListGroupItem>
           );
         })}
