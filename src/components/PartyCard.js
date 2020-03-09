@@ -14,7 +14,7 @@ const PartyCard = props => {
         <Card.Title>{props.theme}</Card.Title>
         <Card.Text>
           <Calendar height="40" width="40" />
-          <span>{props.when}</span>
+          <span>{props.prettyWhen}</span>
         </Card.Text>
         <Card.Text>
           <People height="40" width="40" />
