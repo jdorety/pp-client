@@ -10,6 +10,7 @@ import {
   PARTY_LOADING,
   PARTY_SUCCESS
 } from "../../util/actionVars";
+import { convertDate } from "../../util/dataHelpers";
 
 const axiosCall = axios.axiosHeaders();
 
@@ -25,6 +26,7 @@ const PartyView = props => {
     spentBudget: 0
   });
 
+  // retrieve party data from backend
   useEffect(() => {
     dispatch({ type: PARTY_LOADING });
     const partyId = props.match.params.id;
@@ -32,24 +34,25 @@ const PartyView = props => {
       .get(`/api/party/${partyId}`)
       .then(res => {
         console.log("ping");
-        dispatch({ type: PARTY_SUCCESS, party: res.data });
+        const party = res.data;
+        console.log(party);
+        // convert Date string to nice, readable string
+        party.prettyWhen = convertDate(party.when);
+        dispatch({ type: PARTY_SUCCESS, party: party });
       })
       .catch(err => {
         console.log(err);
+        // set error display 
         dispatch({ type: PARTY_FAILURE, error: err });
       });
   }, [props.match.params.id]);
 
+  // keep track of browser width, for responsive conditional rendering of app views
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     window.addEventListener("resize", () => setWidth(window.innerWidth));
   });
-  // const toggleTodo = e => {
-  //   console.log(e.target);
-  //   dispatch({ type: TODO_TOGGLE, index: e.target.name });
-
-  // };
 
   return (
     <PartyContext.Provider value={{ party }}>
