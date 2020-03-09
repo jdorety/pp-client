@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { Alert, Container, Form } from "react-bootstrap";
+import logger from "use-reducer-logger";
 import {
   TODO_LOAD,
   TODO_UPDATE,
@@ -18,7 +19,7 @@ const axiosCall = axios.axiosHeaders();
  * @prop {number} partyId this party's id number in the backend database
  */
 const List = props => {
-  const [state, dispatch] = useReducer(TodoReducer, {
+  const [state, dispatch] = useReducer(logger(TodoReducer), {
     todos: [],
     loading: false,
     error: "",
