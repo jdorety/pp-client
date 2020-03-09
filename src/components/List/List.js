@@ -22,6 +22,7 @@ import {
 } from "../../util/actionVars";
 import axios from "../../util/axios";
 import TodoReducer from "../../reducers/TodoReducer";
+import "./List.scss";
 
 const axiosCall = axios.axiosHeaders();
 
@@ -112,13 +113,17 @@ const List = props => {
       });
   };
 
+  const deleteItem = e => {
+    
+  }
+
   return (
     <>
       {state.error && <Alert variant="danger">{state.error}</Alert>}
       <ListGroup className="mb-3">
         {state.todos.map((item, index) => {
           return (
-            <ListGroupItem key={`todo-${item.id}`}>
+            <ListGroupItem key={`todo-${item.id}`} className="td entry">
               <Form.Check
                 type="checkbox"
                 label={item.item}
@@ -126,6 +131,7 @@ const List = props => {
                 name={index}
                 onChange={toggleHandler}
               />
+              <Button variant="light">X</Button>
             </ListGroupItem>
           );
         })}
