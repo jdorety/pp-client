@@ -1,5 +1,13 @@
-import React, { useEffect, useReducer } from "react";
-import { Alert, Container, Form } from "react-bootstrap";
+import React, { useEffect, useReducer, useState } from "react";
+import {
+  Alert,
+  Container,
+  Form,
+  InputGroup,
+  Button,
+  ListGroup,
+  ListGroupItem
+} from "react-bootstrap";
 import logger from "use-reducer-logger";
 import {
   TODO_LOAD,
@@ -7,7 +15,10 @@ import {
   TODO_FAILURE,
   TOGGLE_START,
   TOGGLE_SUCCESS,
-  TOGGLE_FAILURE
+  TOGGLE_FAILURE,
+  ADD_ITEM_START,
+  ADD_ITEM_SUCCESS,
+  ADD_ITEM_FAILURE
 } from "../../util/actionVars";
 import axios from "../../util/axios";
 import TodoReducer from "../../reducers/TodoReducer";
@@ -26,10 +37,16 @@ const List = props => {
     updating: false
   });
 
+  const [item, setItem] = useState("");
+
   useEffect(() => {
     dispatch({ type: TODO_LOAD });
     fetchTodos();
   }, []);
+
+  const textHandler = e => {
+    setItem(e.target.value);
+  };
 
   const fetchTodos = () => {
     axiosCall
@@ -74,24 +91,61 @@ const List = props => {
     }
   };
 
+  const addItem = e => {
+    e.preventDefault();
+    const newItem = {
+      item: item,
+      completed: false,
+      party_id: props.partyId
+    };
+    dispatch({ type: ADD_ITEM_START, item: newItem });
+    axiosCall
+      .post(`/api/todos`, newItem)
+      .then(res => {
+        dispatch({ type: ADD_ITEM_SUCCESS });
+        console.log(res);
+        fetchTodos();
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch({ type: ADD_ITEM_FAILURE, error: err.message });
+      });
+  };
+
   return (
-    <Container>
+    <>
       {state.error && <Alert variant="danger">{state.error}</Alert>}
-      <Form>
+      <ListGroup className="mb-3">
         {state.todos.map((item, index) => {
           return (
-            <Form.Check
-              key={`todo-${item.id}`}
-              type="checkbox"
-              label={item.item}
-              checked={item.completed}
-              name={index}
-              onChange={toggleHandler}
-            />
+            <ListGroupItem key={`todo-${item.id}`}>
+              <Form.Check
+                type="checkbox"
+                label={item.item}
+                checked={item.completed}
+                name={index}
+                onChange={toggleHandler}
+              />
+            </ListGroupItem>
           );
         })}
+      </ListGroup>
+      <Form onSubmit={addItem}>
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <Button variant="outline-primary" onClick={addItem}>
+              +
+            </Button>
+          </InputGroup.Prepend>
+          <Form.Control
+            type="text"
+            placeholder="Add new item..."
+            value={item}
+            onChange={textHandler}
+          />
+        </InputGroup>
       </Form>
-    </Container>
+    </>
   );
 };
 
