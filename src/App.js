@@ -1,6 +1,6 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import PartyList from "./components/PartyList";
+import PartyList from "./components/PartyList/PartyList";
 import PartyView from "./components/PartyView/PartyView"
 import "./App.css";
 

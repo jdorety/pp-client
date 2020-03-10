@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import People from "../Icons/People";
-import Calendar from "../Icons/Calendar";
+import People from "../../Icons/People";
+import Calendar from "../../Icons/Calendar";
 
 const PartyCard = props => {
   const clickHandler = () => {

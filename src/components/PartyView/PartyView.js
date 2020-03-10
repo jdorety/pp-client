@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import axios from "../../util/axios";
+import { Spinner } from "react-bootstrap";
 import MobileView from "./MobileView";
 import PartyReducer from "../../reducers/PartyReducer";
 import PartyContext from "../../contexts/PartyContext";
 
+import "./PartyView.scss";
 import {
   PARTY_FAILURE,
   PARTY_LOADING,
@@ -42,7 +44,7 @@ const PartyView = props => {
       })
       .catch(err => {
         console.log(err);
-        // set error display 
+        // set error display
         dispatch({ type: PARTY_FAILURE, error: err });
       });
   }, [props.match.params.id]);
@@ -56,6 +58,9 @@ const PartyView = props => {
 
   return (
     <PartyContext.Provider value={{ party }}>
+      {party.loading && (
+        <Spinner animation="grow" className="loading-indicator" />
+      )}
       {width <= 575 && <MobileView />}
       {width > 575 && <h1>Desktop!</h1>}
     </PartyContext.Provider>

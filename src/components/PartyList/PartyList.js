@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "../util/axios";
+import axios from "../../util/axios";
 import { Container } from "react-bootstrap";
 import PartyCard from "./PartyCard";
-import { convertDate } from "../util/dataHelpers";
+import { convertDate } from "../../util/dataHelpers";
 
 const axiosCall = axios.axiosHeaders();
 
